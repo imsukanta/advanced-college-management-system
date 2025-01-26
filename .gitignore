@@ -1,2 +1,5 @@
 .venv
 instance
+# Python
+__pycache__/
+*.py[cod]
