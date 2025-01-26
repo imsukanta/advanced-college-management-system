@@ -6,3 +6,5 @@ def create_app():
     
     #Register your blueprint
     return app
+
+# To run file "flask --app application_name run --debug --host=host_name"
