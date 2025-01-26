@@ -5,6 +5,7 @@ def create_app():
     app.config.from_pyfile('config.py',silent=True)
     
     #Register your blueprint
+    from application.blueprint import dashboard
+    app.register_blueprint(dashboard.bp)
     return app
 
-# To run file "flask --app application_name run --debug --host=host_name"
