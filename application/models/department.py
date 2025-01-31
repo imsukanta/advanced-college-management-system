@@ -1,3 +1,4 @@
+# from application import db
 from application import db
 from sqlalchemy import Column,Integer,String
 class Department(db.Model):
