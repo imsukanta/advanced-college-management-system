@@ -1,4 +1,3 @@
-from flaskr import Base
 from sqlalchemy import Column,Integer,String,ForeignKey,Boolean,Enum,Date,DateTime,Table,Time,JSON,FLOAT,Float
 from sqlalchemy.orm import relationship
 from datetime import datetime

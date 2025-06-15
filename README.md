@@ -9,6 +9,7 @@ npm install
 Open Tab:
 Run: flask --app flaskr run --debug --host="HOST_NAME"
 Open Another Tab:
+flask --app flaskr create-superuser
 Run: npm run buildcss
 Go TO : url/user/add-user
 Add one admin

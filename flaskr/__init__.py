@@ -46,8 +46,7 @@ def create_app():
     from . import search
     from . import exam
     from . import role
-    # from flaskr.command import bp
-    # app.register_blueprint(bp)
+    from flaskr.commands import register_commands
     app.register_blueprint(role.bp)
     app.register_blueprint(exam.bp)
     app.register_blueprint(search.bp)
@@ -65,4 +64,5 @@ def create_app():
     app.register_blueprint(studentIndex.bp)
     app.register_blueprint(sessionyear.bp)
     app.register_blueprint(student_login.bp)
+    register_commands(app)
     return app

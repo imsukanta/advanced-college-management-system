@@ -77,20 +77,20 @@ def update_user(id):
     return render_template('updatefile/updateUser.html',user=user,new_role=new_role)
 
 #create an superuser using command line interface
-# def create_superuser():
-#     name=click.prompt("Enter your name: ",type=str)
-#     email=click.prompt("Enter your email: ",type=str)
-#     password=click.prompt("Enter your password: ",type=str)
-#     role=Role.query.filter_by(name="superuser").first()
-#     check_email=User.query.filter_by(email=email).first()
-#     if check_email:
-#         print("Email already exists")
-#         exit()
-#     if not role:
-#         role_add=Role(name="superuser",description="Superuser can access everything")
-#         db.session.add(role_add)
-#         db.session.flush()
-#     user_add=User(name=name,email=email,password=generate_password_hash(password),is_active=True,role=role)
-#     db.session.add(user_add)
-#     db.session.commit()
-#     print(f"Superuser successfully created")
+def create_superuser():
+    name=click.prompt("Enter your name: ",type=str)
+    email=click.prompt("Enter your email: ",type=str)
+    password=click.prompt("Enter your password: ",type=str)
+    role=Role.query.filter_by(name="superuser").first()
+    check_email=User.query.filter_by(email=email).first()
+    if check_email:
+        print("Email already exists")
+        exit()
+    if not role:
+        role_add=Role(name="superuser",description="Superuser can access everything")
+        db.session.add(role_add)
+        db.session.flush()
+    user_add=User(name=name,email=email,password=generate_password_hash(password),is_active=True,role=role)
+    db.session.add(user_add)
+    db.session.commit()
+    print(f"Superuser successfully created")
