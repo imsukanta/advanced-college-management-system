@@ -8,6 +8,9 @@ import math
 import pandas as pd
 from flask_mail import Message
 from flaskr import mail
+import pandas as pd
+from werkzeug.utils import secure_filename
+import os
 bp=Blueprint("student",__name__,url_prefix="/student")
 
 # Calculate due fees of specific student
@@ -318,3 +321,129 @@ def add_student_excel():
         excel_file.dropna(inplace=True)
         print(excel_file.to_string())
     return render_template('addfile/addExcel.html')
+
+
+@bp.route("/bulk-import-students", methods=['POST'])
+@permission_required('add_student')
+def bulk_import():
+    if 'excel_file' not in request.files:
+        flash("No file part in the request")
+        return redirect(url_for('student.add_student'))
+
+    file = request.files['excel_file']
+    if file.filename == '':
+        flash("No file selected")
+        return redirect(url_for('student.add_student'))
+
+    if not file.filename.endswith('.xlsx'):
+        flash("Please upload a valid .xlsx file")
+        return redirect(url_for('student.add_student'))
+
+    filename = secure_filename(file.filename)
+    filepath = os.path.join('uploads', filename)
+    os.makedirs('uploads', exist_ok=True)
+    file.save(filepath)
+
+    try:
+        df = pd.read_excel(filepath)
+
+        required_columns = [
+            'university_reg_no', 'university_roll_no', 'name', 'email', 'gender',
+            'contact_no', 'alternative_contact_number', 'father_name', 'mother_name',
+            'parent_contact_number', 'domicile_state', 'permanent_address',
+            'blood_group', 'religion', 'caste', 'physically_challanged',
+            'pan_card_no', 'aadhar_card_no', 'department', 'current_semester',
+            'total_fees', 'access_of_library', 'confirmation', 'date_of_birth',
+            'admission_date'
+        ]
+
+        if not all(col in df.columns for col in required_columns):
+            flash("Missing required columns in Excel sheet")
+            return redirect(url_for('student.add_student'))
+
+        active_session = Session.query.filter_by(is_active=True).first()
+        if not active_session:
+            flash("No active session found")
+            return redirect(url_for('student.add_student'))
+
+        created_count = 0
+        for _, row in df.iterrows():
+            try:
+                if len(str(row['contact_no'])) != 10 or len(str(row['alternative_contact_number'])) != 10 or len(str(row['parent_contact_number'])) != 10:
+                    continue
+
+                if row['gender'] not in ['Male', 'Female']:
+                    continue
+
+                if row['physically_challanged'] not in ['Yes', 'No']:
+                    continue
+
+                if int(row['current_semester']) % 2 == 0:
+                    continue
+
+                dob = pd.to_datetime(row['date_of_birth']).date()
+                admission_date = pd.to_datetime(row['admission_date']).date()
+                password = dob.strftime("%d%m%Y")
+
+                student = Student(
+                    university_reg_no=row['university_reg_no'],
+                    university_roll_no=row['university_roll_no'],
+                    name=row['name'],
+                    email=row['email'],
+                    password=generate_password_hash(password),
+                    contact_number=str(row['contact_no']),
+                    alternative_contact_number=str(row['alternative_contact_number']),
+                    parent_contact_number=str(row['parent_contact_number']),
+                    father_name=row['father_name'],
+                    mother_name=row['mother_name'],
+                    domicile_state=row['domicile_state'],
+                    permanent_address=row['permanent_address'],
+                    date_of_birth=dob,
+                    blood_group=row['blood_group'],
+                    religion=row['religion'],
+                    caste=row['caste'],
+                    gender=row['gender'],
+                    physically_challanged=row['physically_challanged'],
+                    pan_card_no=row['pan_card_no'],
+                    aadhar_card_no=row['aadhar_card_no'],
+                    total_fees=row['total_fees'],
+                    department_id=int(row['department']),
+                    admission_date=admission_date,
+                    admission_session=active_session.id,
+                    current_session=active_session.id,
+                    current_semester=row['current_semester'],
+                    start_semester=row['current_semester'],
+                    access_of_library=(str(row['access_of_library']).strip().lower() == 'true'),
+                    is_active=(str(row['confirmation']).strip().lower() == 'true')
+                )
+
+                db.session.add(student)
+                created_count += 1
+
+                # Send email
+                msg = Message("Successfully Registered", recipients=[row['email']])
+                msg.body = f"""
+                Hello {row['name']},
+
+                Your registration was successful!
+
+                Username: {row['email']}
+                Password: {password}
+                You can now log in using your credentials.
+
+                Thank you for registering!
+
+                - Your Team Name
+                """
+                mail.send(msg)
+
+            except Exception as e:
+                print(f"Skipping student due to error: {e}")
+                continue
+
+        db.session.commit()
+        flash(f"{created_count} students imported successfully.")
+    except Exception as e:
+        flash(f"Failed to import: {str(e)}")
+
+    return redirect(url_for('student.add_student'))
