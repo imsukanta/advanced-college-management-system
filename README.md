@@ -7,6 +7,8 @@ pip install requirements.txt
 npm init
 npm install
 Open Tab:
+Run(one time): flask --app flaskr db init
+Run: flask --app flaskr db migrate -m "Initial Migration"
 Run: flask --app flaskr run --debug --host="HOST_NAME"
 Open Another Tab:
 flask --app flaskr create-superuser

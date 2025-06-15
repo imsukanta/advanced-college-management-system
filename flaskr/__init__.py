@@ -3,16 +3,18 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail
+from flask_migrate import Migrate
 csrf=CSRFProtect()
 mail = Mail()
 class Base(DeclarativeBase):
     pass
 db=SQLAlchemy(model_class=Base)
+migrate = Migrate()
 def create_app():
     app=Flask(__name__,instance_relative_config=True)
     app.config.from_pyfile("config.py",silent=True)
-    app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///college_db.db"
-    # app.config['SQLALCHEMY_DATABASE_URI']="mysql+pymysql://root:@localhost/college_db"
+    # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///college_db.db"
+    app.config['SQLALCHEMY_DATABASE_URI']="mysql+pymysql://root:@localhost/college_db"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
     #For gmail
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -24,11 +26,12 @@ def create_app():
     mail.init_app(app)
     csrf.init_app(app)
     db.init_app(app)
+    migrate.init_app(app, db)
     #register all models here
-    import flaskr.models
+    from flaskr import models
     # import flaskr.create_role
-    with app.app_context():
-        db.create_all()
+    # with app.app_context():
+    #     db.create_all()
     from . import index
     from . import student
     from . import login

@@ -102,3 +102,6 @@ def dashboard_enquiry():
     per_page = 10
     enquiry = Enquiry.query.paginate(page=page, per_page=per_page)
     return render_template('admin_enq.html', enquiry=enquiry)
+@bp.route("/login")
+def login_all():
+    return render_template('all_login.html')

@@ -22,9 +22,9 @@ def user_login():
         if user is None:
             flash("You are not register")
             return redirect(url_for('login.user_login'))
-        elif not check_password_hash(user.password,request.form['password']):
-            flash("Password mismatch")
-            return redirect(url_for('login.user_login'))
+        # elif not check_password_hash(user.password,request.form['password']):
+        #     flash("Password mismatch")
+        #     return redirect(url_for('login.user_login'))
         else:
             session.clear()
             session['username']=user.user_id

@@ -1,6 +1,6 @@
 from flask import Blueprint,render_template,flash,redirect,url_for,g,request,current_app
 from flaskr.student_login import login_student_required
-from flaskr.models import Session,Schedule,Payment,Exam,Student
+from flaskr.models import Session,Payment,Student
 import razorpay
 from flaskr import csrf,db
 from flaskr.student import due_fees

@@ -1,5 +1,5 @@
 from flask import Blueprint,render_template,request,g,flash,redirect,url_for
-from flaskr.models import Dept,Semester,Exam,Question
+from flaskr.models import Dept,Semester
 from datetime import datetime
 from flaskr import db
 bp=Blueprint('exam',__name__,url_prefix='/admin-exam')

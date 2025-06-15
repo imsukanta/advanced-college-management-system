@@ -159,7 +159,7 @@ class Schedule(db.Model):
     id=db.Column(Integer,primary_key=True)
     day=db.Column(Enum("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"),nullable=False)
     dept_id=db.Column(Integer,ForeignKey('department.dept_id'),nullable=False)
-    sem_id=db.Column(Integer,ForeignKey("semester.semester_level",ondelete='CASCADE'),nullable=False)
+    sem_id = db.Column(Integer, ForeignKey("semester.id", ondelete='CASCADE'), nullable=False)
     staff_id=db.Column(Integer,ForeignKey('staffs.staff_id'))
     start_time=db.Column(Time,nullable=False)
     course_id=db.Column(Integer,ForeignKey('course.id'))
@@ -172,22 +172,23 @@ class Schedule(db.Model):
 
 
 class Exam(db.Model):
-    __tablename__='exam'
-    exam_id=db.Column(Integer,primary_key=True)
-    exam_name=db.Column(String(100))
-    description=db.Column(String(200))
-    dept_id=db.Column(Integer,ForeignKey('department.dept_id',ondelete='CASCADE'))
-    sem_id=db.Column(Integer,ForeignKey('semester.semester_level',ondelete='CASCADE'))
-    created_by=db.Column(Integer,ForeignKey('users.user_id',ondelete='CASCADE'))
-    total_marks=db.Column(Integer)
-    duration=db.Column(Integer)
-    start_date=db.Column(Date)
-    end_date=db.Column(Date)
-    is_active=db.Column(Boolean,default=False)
-    department=relationship('Dept',back_populates='exam')
-    semester=relationship('Semester',back_populates='exam')
-    user=relationship('User',back_populates='exam')
-    question=relationship('Question',back_populates='exam',cascade='all,delete-orphan')
+    __tablename__ = 'exam'
+    exam_id = db.Column(Integer, primary_key=True)
+    exam_name = db.Column(String(100))
+    description = db.Column(String(200))
+    dept_id = db.Column(Integer, db.ForeignKey('department.dept_id', ondelete='CASCADE'))
+    sem_id = db.Column(Integer, db.ForeignKey('semester.id', ondelete='CASCADE'))  # ✅ fixed here
+    created_by = db.Column(Integer, db.ForeignKey('users.user_id', ondelete='CASCADE'))
+    total_marks = db.Column(Integer)
+    duration = db.Column(Integer)
+    start_date = db.Column(Date)
+    end_date = db.Column(Date)
+    is_active = db.Column(Boolean, default=False)
+
+    department = relationship('Dept', back_populates='exam')
+    semester = relationship('Semester', back_populates='exam')
+    user = relationship('User', back_populates='exam')
+    question = relationship('Question', back_populates='exam', cascade='all,delete-orphan')
 
 class Question(db.Model):
     __tablename__='question'

@@ -6,6 +6,8 @@ import random
 import string
 from flaskr.login import permission_required
 from werkzeug.security import generate_password_hash
+from flask_mail import Message
+from flaskr import mail
 bp=Blueprint('staff',__name__,url_prefix='/staff')
 
 def generate_employee_id(prefix="MIT", length=6):
@@ -51,6 +53,23 @@ def add_staff():
         staff=Staff(emp_id=generate_employee_id(),name=name,email=email,mobile_no=mobile_no,date_of_birth=date_of_birth,address=address,gender=gender,designation=designation,department_id=dpt.dept_id,qualification=qualification,year_of_experience=year_of_experience,password=generate_password_hash(password),is_active=is_active)
         db.session.add(staff)
         db.session.commit()
+        subject="Successfully Register"
+        msg = Message(subject, recipients=[request.form['email']])
+        msg.body= f"""
+        Hello,
+
+            Your registration was successful!
+
+            Username: {email}
+            Password: {password}
+            You can now log in using your credentials.
+
+            Thank you for registering!
+
+            - Your Team Name
+            """
+
+        mail.send(msg)
         return redirect(url_for('staff.staff_dashboard'))
     return render_template('addfile/addStaff.html',dept=dept)
 

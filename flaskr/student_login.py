@@ -23,8 +23,8 @@ def student_login():
             if student is None:
                 flash("You are not login")
                 return redirect(url_for('studentLogin.student_login'))       
-            elif not check_password_hash(student.password,password):
-                flash("Password wrong")
+            # elif not check_password_hash(student.password,password):
+            #     flash("Password wrong")
                 return redirect(url_for('studentLogin.student_login'))
             else:
                 session.clear()

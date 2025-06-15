@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+{% block mainapp %}
+<div class="w-full max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Select Login Type</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Staff Login -->
+      <a href="{{url_for("teacherauth.teacher_login")}}" class="block bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition duration-300 cursor-pointer">
+        <h2 class="text-xl font-semibold text-center text-indigo-600 mb-4">Staff Login</h2>
+        <p class="text-gray-600 text-center">Login as a faculty or teaching staff member.</p>
+      </a>
+
+      <!-- Admin Login -->
+      <a href="{{url_for("login.user_login")}}" class="block bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition duration-300 cursor-pointer">
+        <h2 class="text-xl font-semibold text-center text-red-600 mb-4">Admin Login</h2>
+        <p class="text-gray-600 text-center">Login to manage system-wide settings and users.</p>
+      </a>
+
+      <!-- Student Login -->
+      <a href="{{url_for("studentLogin.student_login")}}" class="block bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition duration-300 cursor-pointer">
+        <h2 class="text-xl font-semibold text-center text-green-600 mb-4">Student Login</h2>
+        <p class="text-gray-600 text-center">Access your profile, results, and more.</p>
+      </a>
+
+    </div>
+  </div>
+{% endblock mainapp %}
