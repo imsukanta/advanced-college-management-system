@@ -5,6 +5,8 @@ import razorpay
 from flaskr import csrf,db
 from flaskr.student import due_fees
 from werkzeug.security import check_password_hash,generate_password_hash
+from flask_mail import Message
+from flaskr import mail
 bp=Blueprint("studentIndex",__name__,url_prefix="/student-dashboard")
 
 
@@ -116,6 +118,23 @@ def payment_success():
         payment.status = order['status']
         payment.is_verified == 'true'
         db.session.commit()
+        student_email = g.student.email   # Adjust this to your student model
+        msg = Message("Payment Successful",
+                      recipients=[student_email])
+        msg.body = f"""
+        Hello {g.student.name},
+
+        Your payment of ₹{amount} has been received successfully.
+
+        Order ID: {razorpay_order_id}
+        Payment ID: {razorpay_payment_id}
+        Status: {order['status']}
+
+        Thank you.
+
+        - Your College Name
+        """
+        mail.send(msg)
         flash("Payment successful and verified!")
         return render_template('student/success.html', callback_data=callback_data)
 

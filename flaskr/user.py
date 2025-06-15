@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash
 from flaskr import db
 import click
 from flaskr.login import permission_required
+from flaskr import mail
+from flask_mail import Message
 
 bp=Blueprint("user",__name__,url_prefix="/user")
 @bp.route("/")
@@ -22,13 +24,14 @@ def add_user():
         is_active = request.form.get('confirmation') == 'true'
         role=request.form['role']
         role_id=Role.query.get(int(role))
-        if role_id.name=="superuser":
-            flash("You can't create superuser")
-            return redirect(url_for('user.add_user'))
         if request.form['name'] and request.form['email'] and request.form['password1'] and request.form['password2'] and request.form['password1']==request.form['password2'] and role:
             user=User(name=request.form['name'],email=request.form['email'],password=generate_password_hash(request.form['password1']),is_active=is_active,role=role_id)
             db.session.add(user)
             db.session.commit()
+            subject="Successfully Register"
+            msg = Message(subject, recipients=[request.form['email']])
+            msg.body = f"Your successfully register your username:{request.form['email']} and password {request.form['password1']}"
+            mail.send(msg)
             flash('Successfully added')
             return redirect(url_for('user.add_user'))
         else:
@@ -74,20 +77,20 @@ def update_user(id):
     return render_template('updatefile/updateUser.html',user=user,new_role=new_role)
 
 #create an superuser using command line interface
-def create_superuser():
-    name=click.prompt("Enter your name: ",type=str)
-    email=click.prompt("Enter your email: ",type=str)
-    password=click.prompt("Enter your password: ",type=str)
-    role=Role.query.filter_by(name="superuser").first()
-    check_email=User.query.filter_by(email=email).first()
-    if check_email:
-        print("Email already exists")
-        exit()
-    if not role:
-        role_add=Role(name="superuser",description="Superuser can access everything")
-        db.session.add(role_add)
-        db.session.flush()
-    user_add=User(name=name,email=email,password=generate_password_hash(password),is_active=True,role=role)
-    db.session.add(user_add)
-    db.session.commit()
-    print(f"Superuser successfully created")
+# def create_superuser():
+#     name=click.prompt("Enter your name: ",type=str)
+#     email=click.prompt("Enter your email: ",type=str)
+#     password=click.prompt("Enter your password: ",type=str)
+#     role=Role.query.filter_by(name="superuser").first()
+#     check_email=User.query.filter_by(email=email).first()
+#     if check_email:
+#         print("Email already exists")
+#         exit()
+#     if not role:
+#         role_add=Role(name="superuser",description="Superuser can access everything")
+#         db.session.add(role_add)
+#         db.session.flush()
+#     user_add=User(name=name,email=email,password=generate_password_hash(password),is_active=True,role=role)
+#     db.session.add(user_add)
+#     db.session.commit()
+#     print(f"Superuser successfully created")

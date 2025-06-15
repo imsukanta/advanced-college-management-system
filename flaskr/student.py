@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 import math
 import pandas as pd
+from flask_mail import Message
+from flaskr import mail
 bp=Blueprint("student",__name__,url_prefix="/student")
 
 # Calculate due fees of specific student
@@ -134,6 +136,23 @@ def add_student():
             )
             db.session.add(student)
             db.session.commit()
+            subject="Successfully Register"
+            msg = Message(subject, recipients=[request.form['email']])
+            msg.body= f"""
+            Hello,
+
+            Your registration was successful!
+
+            Username: {email}
+            Password: {password}
+            You can now log in using your credentials.
+
+            Thank you for registering!
+
+            - Your Team Name
+            """
+
+            mail.send(msg)
             flash("Student successfully created")
             return redirect(url_for('student.student_dashboard'))
         except Exception as e:

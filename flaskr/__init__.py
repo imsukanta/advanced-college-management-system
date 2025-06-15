@@ -2,7 +2,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_wtf.csrf import CSRFProtect
+from flask_mail import Mail
 csrf=CSRFProtect()
+mail = Mail()
 class Base(DeclarativeBase):
     pass
 db=SQLAlchemy(model_class=Base)
@@ -12,6 +14,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///college_db.db"
     # app.config['SQLALCHEMY_DATABASE_URI']="mysql+pymysql://root:@localhost/college_db"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+    #For gmail
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = "sukantamalik2002@gmail.com"
+    app.config['MAIL_PASSWORD'] = "krkk ndmo cfem zpwf"
+    app.config['MAIL_DEFAULT_SENDER'] = "sukantamalik2002@gmail.com"
+    mail.init_app(app)
     csrf.init_app(app)
     db.init_app(app)
     #register all models here
@@ -36,8 +46,8 @@ def create_app():
     from . import search
     from . import exam
     from . import role
-    from flaskr.command import bp
-    app.register_blueprint(bp)
+    # from flaskr.command import bp
+    # app.register_blueprint(bp)
     app.register_blueprint(role.bp)
     app.register_blueprint(exam.bp)
     app.register_blueprint(search.bp)
