@@ -1,16 +1,32 @@
 {% extends "dashboard.html" %}
 {% block title %}Add Student{% endblock title %}
 {% block content %}
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Student Form <span class="text-sm">(Bear in mind password of staff
-            is dob(yyyymmdd); like:20020227)</span></h1>
-    <form action="{{ url_for('student.bulk_import') }}" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-        <label for="excel_file">Upload Excel File (.xlsx)</label>
-        <input type="file" name="excel_file" accept=".xlsx" required>
-        <button class="" type="submit">Bulk Import Students</button>
+<div class="max-w-4xl mx-auto mt-12 bg-white p-8 rounded-2xl shadow-xl">
+    <h1 class="text-3xl font-bold text-blue-700 mb-2">Bulk Import Students</h1>
+    <p class="text-sm text-gray-600 mb-6">
+        <strong>Note:</strong> Default password for staff is their DOB in <code>yyyymmdd</code> format (e.g., <code>20020227</code>).
+    </p>
+
+    <form action="{{ url_for('student.bulk_import') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div>
+            <label for="excel_file" class="block text-gray-700 font-medium mb-2">Upload Excel File (.xlsx)</label>
+            <input
+                type="file"
+                name="excel_file"
+                accept=".xlsx"
+                required
+                class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            >
+        </div>
+
+        <button
+            type="submit"
+            class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition duration-200 shadow"
+        >
+            Upload & Import
+        </button>
     </form>
-
-
 </div>
 {% endblock content %}
