@@ -1,0 +1,159 @@
+{% extends "dashboard.html" %}
+
+{% block title %}
+Student Profile
+{% endblock title %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="flex justify-end space-x-2">
+        <a href="{{url_for('student.update_profile', id=student.id)}}"
+           class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700">
+            Edit
+        </a>
+        <a href="{{url_for('student.delete_profile', id=student.id)}}"
+           class="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700"
+           onclick="return confirm('Are you sure you want to delete this student?');">
+            Delete
+        </a>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden max-w-6xl mx-auto p-6">
+        
+        <!-- Profile Details Table -->
+        <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-blue-500 text-white">
+                    <th class="border border-gray-300 px-4 py-2 text-left">Field</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Full Name</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.name}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">University Registration Number</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.university_reg_no}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">University Roll Number</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.university_roll_no}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Department</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.department.dept_name}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Date of Birth</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.date_of_birth}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Gender</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.gender}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Father Name</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.father_name}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Mother Name</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.mother_name}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Parent Contact Number</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.parent_contact_number}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Contact</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.contact_number}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Alternative Contact</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.alternative_contact_number}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Email</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.email}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Blood Group</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.blood_group}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Religion</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.religion}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Caste</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.caste}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Physically Challenged</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.physically_challanged}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Pan Card Number</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.pan_card_no}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Aadhar Card Number</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.aadhar_card_no}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Start Semester</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.start_semester}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Current Semester</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.current_semester}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Domicile State</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.domicile_state}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Permanent Address</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.permanent_address}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Admission Date</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.admission_date}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Admission Session</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.admission_session_obj.name}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Access of Library</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.access_of_library}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Active Status</td>
+                    <td class="border border-gray-300 px-4 py-2">{{student.is_active}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Total Fees</td>
+                    <td class="border border-gray-300 px-4 py-2">₹ {{student.total_fees}}</td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">Fees Paid</td>
+                    <td class="border border-gray-300 px-4 py-2">₹ {{fee_pay}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-between p-6">
+        <a href="{{url_for('student.show_payment', student_id=student.id)}}"
+           class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow-md">
+            Manage Payment
+        </a>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md">
+            Manage Result
+        </button>
+    </div>
+</div>
+{% endblock content %}

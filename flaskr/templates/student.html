@@ -1,0 +1,135 @@
+{% extends "dashboard.html" %} {% block title %}Student{% endblock title %} {%
+block content %}
+<div class="container mx-auto rounded-lg">
+  <!-- Top Section -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- Filter Form -->
+    <div class="flex items-center">
+      <form method="get" class="flex gap-2">
+        <select
+          id="filter"
+          name="filter"
+          required
+          class="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="">Select Option</option>
+            <option value="az" {% if filter == 'az' %}selected{% endif %}>A-Z</option>
+            <option value="za" {% if filter == 'za' %}selected{% endif %}>Z-A</option>
+            <option value="department" {% if filter == 'department' %}selected{% endif %}>Department</option>
+            <option value="roll" {% if filter == 'roll' %}selected{% endif %}>Roll No</option>
+        </select>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        >
+          Apply
+        </button>
+      </form>
+    </div>
+    <!-- Action Buttons -->
+    <div class="flex gap-4">
+      <a
+        href="{{url_for('student.add_student_excel')}}"
+        class="flex items-center justify-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+      >
+        Add Excel
+      </a>
+      <a
+        href="{{url_for('student.add_student')}}"
+        class="flex items-center justify-center bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+      >
+        Add User
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="overflow-x-auto my-8">
+  <table
+    class="w-full bg-white border border-gray-300 rounded-lg shadow-lg"
+  >
+    <!-- Table Head -->
+    <thead>
+      <tr class="bg-gray-200 text-gray-800 text-left uppercase text-sm font-semibold">
+        <th class="px-4 py-3 border-b">ID</th>
+        <th class="px-4 py-3 border-b">Name</th>
+        <th class="px-4 py-3 border-b hidden md:table-cell">Email</th>
+        <th class="px-4 py-3 border-b hidden md:table-cell">Mobile No</th>
+        <th class="px-4 py-3 border-b">Actions</th>
+      </tr>
+    </thead>
+    <!-- Table Body -->
+    <tbody>
+      {% for student in students %}
+      <tr class="hover:bg-gray-50 border-b">
+        <!-- ID -->
+        <td class="px-4 py-3 text-gray-700">{{ student.id }}</td>
+        <!-- Name -->
+        <td class="px-4 py-3 text-gray-700 truncate">
+          <a href="{{ url_for('student.show_profile', id=student.id) }}" class="text-blue-600 hover:underline">
+            {{ student.name }}
+          </a>
+        </td>
+        <!-- Email (Hidden on small screens) -->
+        <td class="px-4 py-3 text-gray-700 hidden md:table-cell">
+          {{ student.email }}
+        </td>
+        <!-- Mobile No (Hidden on small screens) -->
+        <td class="px-4 py-3 text-gray-700 hidden md:table-cell">
+          {{ student.contact_number }}
+        </td>
+        <!-- Actions -->
+        <td class="px-4 py-3 flex flex-wrap gap-2 justify-center">
+          <a
+            href="{{ url_for('student.show_profile', id=student.id) }}"
+            class="bg-blue-500 text-white text-sm px-3 py-2 rounded-md hover:bg-blue-600"
+          >
+            Show
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="flex justify-center items-center mt-8 space-x-4">
+  <!-- Previous page link -->
+  {% if students.has_prev %}
+  <a
+    class="px-2 py-1 bg-gray-800 text-white rounded-lg border-2 border-gray-700 hover:bg-gray-700 hover:text-gray-200 transition-colors"
+    href="{{ url_for('student.student_dashboard', page=students.prev_num,filter=request.args.get('filter')) }}"
+  >
+    Previous
+  </a>
+  {% else %}
+  <span
+    class="px-2 py-1 bg-gray-300 text-gray-500 rounded-lg border-2 border-gray-200 cursor-not-allowed"
+  >
+    Previous
+  </span>
+  {% endif %}
+
+  <!-- Page numbers -->
+  <span class="text-lg font-semibold text-gray-700">
+    Page {{ students.page }} of {{ students.pages }}
+  </span>
+
+  <!-- Next page link -->
+  {% if students.has_next %}
+  <a
+    class="px-2 py-1 bg-gray-800 text-white rounded-lg border-2 border-gray-700 hover:bg-gray-700 hover:text-gray-200 transition-colors"
+    href="{{ url_for('student.student_dashboard', page=students.next_num,filter=request.args.get('filter')) }}"
+  >
+    Next
+  </a>
+  {% else %}
+  <span
+    class="px-2 py-1 bg-gray-300 text-gray-500 rounded-lg border-2 border-gray-200 cursor-not-allowed"
+  >
+    Next
+  </span>
+  {% endif %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block maincontent %}
+   <div class="flex h-screen">
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-20 w-64 bg-gray-800 text-gray-100 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+            <div class="p-4 text-xl font-bold text-center border-b border-gray-700">
+                Admin Dashboard
+            </div>
+            <nav class="p-4 overflow-y-scroll scrollbar-hide max-h-screen">
+
+                <a href="{{ url_for('index.dashboard') }}" class="block py-2 px-4 rounded hover:bg-gray-700">Dashboard</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('student.student_dashboard') }}">Student</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('staff.staff_dashboard') }}">Staff</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('user.user_dashboard') }}">User</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('dept.department') }}">Department</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('sessionsem.show_session') }}">Session</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('sessionsem.show_semester') }}">Semester</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('course.dashboard_course') }}">Course</a>
+
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('enrollment.dashboard_enroll') }}">Enrollment</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('schedule.schedule_dashboard') }}">Schedule</a>
+                <a class="block py-2 px-4 rounded hover:bg-gray-700" href="{{ url_for('role.role_dashboard') }}">Role</a>
+                <!-- Dropdown Section -->
+
+                <a href="{{url_for('login.logout')}}" class="block py-2 px-4 rounded hover:bg-gray-700">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Overlay for Sidebar (on mobile) -->
+        <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden md:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-0 md:ml-64">
+
+            <!-- Top Bar -->
+            <header class="bg-white shadow p-4 flex justify-between items-center">
+                <button id="menuButton" class="md:hidden text-gray-600 focus:outline-none focus:ring">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-semibold">{{g.user.name}}</h1>
+                <form action="{{ url_for('search.search_dashboard') }}" method='get'>
+                <input name="search" type="text" placeholder="Search..."
+                    class="hidden md:block p-2 w-52 border rounded focus:outline-none focus:ring focus:ring-blue-300" />
+                </form>
+            </header>
+
+            <!-- Content Area -->
+            <div class="p-6">
+{% block content %}{% endblock content %}
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Script for Sidebar and Dropdown -->
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const menuButton = document.getElementById("menuButton");
+        const dropdownToggle = document.getElementById("dropdownToggle");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+
+        // Sidebar Toggle
+        menuButton.addEventListener("click", () => {
+            sidebar.classList.toggle("-translate-x-full");
+            overlay.classList.toggle("hidden");
+        });
+
+        overlay.addEventListener("click", () => {
+            sidebar.classList.add("-translate-x-full");
+            overlay.classList.add("hidden");
+        });
+
+        // Dropdown Toggle
+        dropdownToggle.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+            dropdownToggle.querySelector("svg").classList.toggle("rotate-180");
+        });
+    </script>
+{% endblock maincontent %}
