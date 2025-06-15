@@ -12,6 +12,6 @@ def dashboard():
     staff=db.session.query(Staff).count()
     student=db.session.query(Student).count()
     return render_template("index.html",user=user,staff=staff,student=student)
-@bp.route("")
+@bp.route("/")
 def home():
     return render_template("home.html")
