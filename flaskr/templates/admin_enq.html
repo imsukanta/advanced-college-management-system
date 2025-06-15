@@ -1,0 +1,66 @@
+{% extends "dashboard.html" %}
+{% block title %}Enquiry{% endblock title %}
+
+{% block content %}
+<div class="overflow-x-auto my-8">
+    <table class="md:min-w-full w-full table-fixed md:table-fixed bg-white border border-gray-200 rounded-lg shadow-lg">
+        <!-- Table Head -->
+        <thead>
+            <tr class="bg-gray-200 text-gray-700 text-left uppercase text-sm">
+                <th class="px-6 py-3 border-b">#</th>
+                <th class="px-6 py-3 border-b">Name</th>
+                <th class="px-6 py-3 border-b">Email</th>
+                <th class="px-6 py-3 border-b">Subject</th>
+                <th class="px-6 py-3 border-b">Actions</th>
+            </tr>
+        </thead>
+        <!-- Table Body -->
+        <tbody>
+            {% for enq in enquiry.items %}
+            <tr class="hover:bg-gray-100">
+                <td class="px-6 py-2 border-b text-gray-700">{{ loop.index + ((enquiry.page - 1) * enquiry.per_page) }}</td>
+                <td class="px-6 py-2 border-b text-gray-700">{{ enq.name }}</td>
+                <td class="px-6 py-2 border-b text-gray-700">{{ enq.email }}</td>
+                <td class="px-6 py-2 border-b text-gray-700">{{ enq.subject }}</td>
+                <td class="px-6 py-2 flex flex-col items-center space-y-1 md:flex-row border-b text-gray-700">
+                    <a href="{{ url_for('index.update_enquiry', id=enq.id) }}" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">Update</a>
+                    <a href="{{ url_for('index.delete_enquiry', id=enq.id) }}" onclick="return confirm('Are you sure?')" class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 ml-2">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="flex justify-center items-center mt-8 space-x-4">
+    <!-- Previous page link -->
+    {% if enquiry.has_prev %}
+        <a class="px-2 py-1 bg-gray-800 text-white rounded-lg border-2 border-gray-700 hover:bg-gray-700 hover:text-gray-200 transition-colors"
+           href="{{ url_for('dashboard_enquiry', page=enquiry.prev_num) }}">
+            Previous
+        </a>
+    {% else %}
+        <span class="px-2 py-1 bg-gray-300 text-gray-500 rounded-lg border-2 border-gray-200 cursor-not-allowed">
+            Previous
+        </span>
+    {% endif %}
+
+    <!-- Page numbers -->
+    <span class="text-lg font-semibold text-gray-700">
+        Page {{ enquiry.page }} of {{ enquiry.pages }}
+    </span>
+
+    <!-- Next page link -->
+    {% if enquiry.has_next %}
+        <a class="px-2 py-1 bg-gray-800 text-white rounded-lg border-2 border-gray-700 hover:bg-gray-700 hover:text-gray-200 transition-colors"
+           href="{{ url_for('dashboard_enquiry', page=enquiry.next_num) }}">
+            Next
+        </a>
+    {% else %}
+        <span class="px-2 py-1 bg-gray-300 text-gray-500 rounded-lg border-2 border-gray-200 cursor-not-allowed">
+            Next
+        </span>
+    {% endif %}
+</div>
+
+{% endblock content %}

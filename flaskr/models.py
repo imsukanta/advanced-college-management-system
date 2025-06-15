@@ -228,3 +228,15 @@ class Payment(db.Model):
 #     attendance_id=db.Column(Integer,primary_key=True)
 #     student_id=db.Column(Integer,ForeignKey('student.id'))
 #     course_id=db.Column(Integer,ForeignKey('course.id'))
+class Enquiry(db.Model):
+    __tablename__ = 'enquiry'
+    
+    id = db.Column(Integer, primary_key=True)
+    name = db.Column(String(100), nullable=False)
+    email = db.Column(String(100), nullable=False)
+    phone = db.Column(String(15), nullable=True)
+    subject = db.Column(String(150), nullable=True)
+    message = db.Column(String(250), nullable=True)
+
+    def __repr__(self):
+        return f"<Enquiry {self.name} - {self.email}>"
