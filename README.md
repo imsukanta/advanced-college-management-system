@@ -1,5 +1,8 @@
 Enter Key Id and Key Secret into flaskr/studentIndex.py
 Enter Key Id into "flaskr/templates/student/pay.html"
+pip install virtualenv
+Run: virtualenv .venv
+Run: .venv/Scripts/activate.ps1
 pip install requirements.txt
 npm init
 npm install
