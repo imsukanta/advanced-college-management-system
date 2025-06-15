@@ -6,7 +6,7 @@
         <div class="w-full max-w-5xl flex flex-col items-center">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Payment Dashboard</h1>
             {% if fees %}
-            <h2 class="text-lg font-bold text-center text-gray-800 mb-6">Your Due: {{ fees }}</h2>
+            <h2 class="text-lg font-bold text-center text-gray-800 mb-6">Your Due: ₹{{ fees }}</h2>
 
             <div class="w-full max-w-sm">
                 <form action="{{ url_for('studentIndex.pay_fee') }}" method="get">
@@ -39,17 +39,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for payment in payment %}
+                        {% for p in payment %}
                         <tr class="hover:bg-gray-100">
-                            <td class="p-2 border-b border-gray-300">{{ payment.order_id }}</td>
-                            <td class="p-2 border-b border-gray-300">{{ payment.created_at }}</td>
-                            <td class="p-2 border-b border-gray-300">Rs.{{ payment.ammount_pay }}</td>
-                            <td class="p-2 border-b border-gray-300 text-green-500 font-bold">{{ payment.status }}</td>
-                            <td class="p-3 border-b border-gray-300">
-                                <button 
-                                    class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition" id="demo">
-                                    Print
-                                </button>
+                            <td class="p-2 border-b border-gray-300">{{ p.order_id }}</td>
+                            <td class="p-2 border-b border-gray-300">{{ p.created_at.strftime('%d-%m-%Y') }}</td>
+                            <td class="p-2 border-b border-gray-300">₹{{ p.ammount_pay }}</td>
+                            <td class="p-2 border-b border-gray-300 text-green-500 font-bold">{{ p.status }}</td>
+                            <td class="p-2 border-b border-gray-300">
+                                <a href="{{ url_for('studentIndex.payment_slip', payment_id=p.payment_id) }}" 
+                                   target="_blank"
+                                   class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+                                    🖨️ Print
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -68,11 +69,4 @@
         </div>
     </div>
 </div>
-<script>
-const myElement = document.getElementById("demo");
-myElement.addEventListener('click', () => {
-    // Add functionality here for the Print button
-    alert("hii")
-});
-</script>
 {% endblock studentcontent %}

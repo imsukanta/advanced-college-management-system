@@ -1,0 +1,40 @@
+<!-- templates/student/payment_slip.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Slip</title>
+    <script>
+        function printPage() {
+            document.getElementById('printBtn').style.display = 'none';
+            window.print();
+            document.getElementById('printBtn').style.display = 'block';
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-green-700 text-center mb-4">Payment Receipt</h2>
+        <div class="border p-4 rounded text-gray-800">
+            <p><strong>Name:</strong> {{ payment.student.name }}</p>
+            <p><strong>Roll No:</strong> {{ payment.student.roll }}</p>
+            <p><strong>Course:</strong> {{ payment.student.course }}</p>
+            <p><strong>Semester:</strong> {{ payment.semester.name }}</p>
+            <p><strong>Amount Paid:</strong> ₹ {{ payment.ammount_pay }}</p>
+            <p><strong>Mode:</strong> {{ payment.mode_of_payment }}</p>
+            <p><strong>Transaction ID:</strong> {{ payment.pay_id or 'N/A' }}</p>
+            <p><strong>Order ID:</strong> {{ payment.order_id or 'N/A' }}</p>
+            <p><strong>Date:</strong> {{ payment.created_at.strftime('%d-%m-%Y %I:%M %p') }}</p>
+            <p><strong>Status:</strong> {{ payment.status }}</p>
+        </div>
+
+        <div class="text-center mt-6">
+            <button id="printBtn" onclick="printPage()"
+                class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
+                🖨️ Print
+            </button>
+        </div>
+    </div>
+</body>
+</html>

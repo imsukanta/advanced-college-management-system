@@ -147,3 +147,13 @@ def payment_success():
 def exam():
     data=Exam.query.filter_by(dept_id=g.student.department_id,sem_id=g.student.current_semester)
     return render_template('student/exam.html') 
+@bp.route('/payment-slip/<int:payment_id>')
+def payment_slip(payment_id):
+    payment = Payment.query.get_or_404(payment_id)
+
+    # Ensure student can only access their own slips
+    if payment.student_id != g.student.id:
+        flash("Unauthorized access to payment slip")
+        return redirect(url_for('studentIndex.student_pay'))
+
+    return render_template('pay_slip.html', payment=payment)
