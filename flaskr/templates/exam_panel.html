@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ exam.exam_name }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 min-h-screen">
+
+  <!-- Exam Info -->
+  <div class="max-w-4xl mx-auto bg-white shadow p-6 rounded-lg mb-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-800">{{ exam.exam_name }}</h1>
+      <div id="timer" class="text-red-600 font-mono text-lg">{{ exam.duration }}:00</div>
+    </div>
+    <p class="text-gray-500">{{ exam.description }}</p>
+  </div>
+
+  <form method="POST" action="{{url_for("exam.submit_exam")}}" class="max-w-4xl mx-auto space-y-8 bg-white shadow p-6 rounded-lg">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    {% for q in questions %}
+      <div class="space-y-4">
+        <h2 class="text-lg font-semibold text-gray-800">Q{{ loop.index }}. {{ q.question_text }}</h2>
+        {% for option in q.options %}
+          <label class="block bg-gray-50 hover:bg-blue-100 border border-gray-300 p-3 rounded cursor-pointer">
+            <input type="radio" name="q{{ q.question_id }}" value="{{ loop.index0 }}" class="mr-2" required>
+            {{ option }}
+          </label>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <div class="text-right">
+      <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit Exam</button>
+    </div>
+  </form>
+
+  <!-- Timer -->
+  <script>
+    let seconds = {{ exam.duration }} * 60;
+    const timerEl = document.getElementById("timer");
+
+    function updateTimer() {
+      const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const sec = String(seconds % 60).padStart(2, '0');
+      timerEl.textContent = `${min}:${sec}`;
+      seconds--;
+      if (seconds >= 0) {
+        setTimeout(updateTimer, 1000);
+      } else {
+        alert("Time's up!");
+        document.querySelector('form').submit();
+      }
+    }
+
+    updateTimer();
+  </script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 from flask import Blueprint,render_template,request,g,flash,redirect,url_for
-from flaskr.models import Dept,Semester
+from flaskr.models import Dept,Semester,Exam,Question,Answer
 from datetime import datetime
 from flaskr import db
 bp=Blueprint('exam',__name__,url_prefix='/admin-exam')
@@ -102,3 +102,37 @@ def show_question(id):
         db.session.commit()
         return redirect(url_for('exam.question_dashboard'))    
     return render_template('profile/show_question.html',question=question,exam=exam)
+
+import json
+
+@bp.route('/exam/<int:exam_id>', methods=['GET'])
+def take_exam(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+    questions = Question.query.filter_by(exam_id=exam_id).all()
+
+    # Parse options from JSON string to list
+    for q in questions:
+        q.options = q.options.split('|')
+
+    return render_template('exam_panel.html', exam=exam, questions=questions)
+@bp.route('/submit-exam', methods=['POST'])
+def submit_exam():
+    student_id = 1  # You should fetch this from session or login
+    exam_id = request.args.get('exam_id')
+    questions = Question.query.filter_by(exam_id=exam_id).all()
+
+    for question in questions:
+        selected = request.form.get(f'q{question.question_id}')
+        if selected is not None:
+            answer = Answer(
+                exam_id=exam_id,
+                question_id=question.question_id,
+                student_id=student_id,
+                selected_answer=json.dumps(int(selected)),
+                submission_time=datetime.now()
+            )
+            db.session.add(answer)
+
+    db.session.commit()
+    flash("Exam submitted successfully!")
+    return redirect(url_for('index.home'))
