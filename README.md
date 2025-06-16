@@ -3,12 +3,13 @@ Enter Key Id into "flaskr/templates/student/pay.html"
 pip install virtualenv
 Run: virtualenv .venv
 Run: .venv/Scripts/activate.ps1
-pip install requirements.txt
+pip install -r requirements.txt
 npm init
 npm install
 Open Tab:
 Run(one time): flask --app flaskr db init
 Run: flask --app flaskr db migrate -m "Initial Migration"
+Run: flask --app flaskr db upgrade
 Run: flask --app flaskr run --debug --host="HOST_NAME"
 Open Another Tab:
 flask --app flaskr create-superuser
